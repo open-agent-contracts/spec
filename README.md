@@ -8,9 +8,9 @@ which actions need preview or human authorization, and what receipt proves
 what happened.
 
 This repository is the quiet public setup home for the v0 specification and
-reference portal content. It does not announce a public launch, enable GitHub
-Pages, configure a domain, publish packages, submit marketplace listings, or
-claim certification.
+reference portal content. GitHub Pages is enabled for a small static front
+door. It does not announce a public launch, publish packages, submit
+marketplace listings, or claim certification.
 
 ## Start Here
 
@@ -42,7 +42,6 @@ repository without private source history.
 Still not done:
 
 - public launch authorization;
-- GitHub Pages, domain, DNS, hosting, or deployment;
 - public support surface setup;
 - marketplace submission;
 - package publication;
