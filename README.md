@@ -1,58 +1,66 @@
-# FEATURE-007 S-10 - Local Launch Dry-Run
+# Open Agent Contracts
 
-This is local staging for the FEATURE-007 S-10 v0 launch dry-run and
-smoketest packet.
+Open Agent Contracts is a draft open grammar for agent-ready apps.
 
-It does not publish the portal, create a public repository, register or
-configure a domain, configure hosting, replace placeholder literals with
-durable public values, run public portal CI, claim support availability,
-announce launch, accept external contributions, send messages, spend money, or
-run any credentialed check.
+An agent-ready app tells a personal agent what the app is for, what
+context is available, which actions exist, what each action can change,
+which actions need preview or human authorization, and what receipt proves
+what happened.
 
-The packet exists so a maintainer can see exactly what must be true before the
-portal can move from local staging to a public launch path.
+This repository is the quiet setup home for the v0 specification and
+reference portal content. It is private during setup. It does not announce a
+public launch, enable GitHub Pages, configure a domain, publish packages,
+submit marketplace listings, or claim certification.
 
-## Files
+## Start Here
 
-- `maintainers/launch-dry-run.md` - gate checklist for placeholder
-  replacement, portal-repo readiness, hygiene CI, publication, and launch.
-- `maintainers/skeptical-reader-walkthrough.md` - maintainer-self skeptical
-  reader pass for v0 local staging.
-- `maintainers/smoketest/expected-inventory.json` - deterministic local
-  inventory of staged portal surfaces.
-- `maintainers/smoketest/portal_smoketest.py` - local stdlib smoke checker for
-  the inventory above.
-- `HYGIENE-RECEIPT.md` - S-10 receipt and boundary record.
+- [The Standard](standard/)
+- [Examples](examples/)
+- [Framework Mappings](mappings/)
+- [Compatibility Registry](compat/)
+- [Guides](guides/)
+- [Changelog](changelog/)
+- [No-Lock-In Pledge](open/)
+- [About](about/)
 
-## Local Smoke Command
+## Repository Contents
 
-Run from the repo root:
+- `schema/v0.x/` - v0.1.0 JSON Schema and schema changelog.
+- `standard/` - concepts, vocabulary, gates, receipts, versioning, and
+  conformance.
+- `examples/` - synthetic example contracts.
+- `mappings/` - how Agent Operating Contracts project into adjacent agent and
+  API surfaces.
+- `compat/` - initial compatibility rows and registry index.
+- `maintainers/` - hygiene, source-currency, and launch-readiness tools.
+
+## Current Status
+
+The v0 packet is setup-stage content. It has been transcribed into this clean
+repository without private source history.
+
+Still not done:
+
+- public launch authorization;
+- GitHub Pages, domain, DNS, hosting, or deployment;
+- public support surface setup;
+- marketplace submission;
+- package publication;
+- certification claims.
+
+## Local Checks
+
+Run the hygiene scan:
+
+```bash
+python3 maintainers/hygiene/hygiene_ci.py scan .
+```
+
+Run the inventory smoke:
 
 ```bash
 python3 maintainers/smoketest/portal_smoketest.py
 ```
 
-The checker is local-only. It reads the staged portal source under
-this repository content tree and the maintainer hygiene tools.
-It does not read or write a public portal repository.
-
-## Current Dry-Run Status
-
-Local staging inventory can pass. Public launch cannot proceed yet.
-
-The launch checklist still contains unresolved `AA_*_PLACEHOLDER` literals by
-design, and the public portal repo / domain / hosting / launch gates remain
-closed. S-9A hygiene CI must fail any publish branch that still contains those
-placeholder literals.
-
-## Operator Gates Still Closed
-
-- Public portal repo creation and first transcription.
-- Domain registration, DNS, hosting, and deploy.
-- Placeholder replacement in portal-bound surfaces.
-- License publication.
-- Public support surface.
-- Governance and open-pledge final sign-off.
-- Public launch announcement.
-- Any external submission, send, spend, credentialed check, or irreversible
-  action.
+Both checks are local-only. They do not fetch external URLs, publish the
+repository, open issues, send messages, spend money, or use credentials.

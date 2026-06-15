@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Local S-10 portal staging smoke checker.
+"""Local portal setup smoke checker.
 
-The checker reads only local staged files. It does not fetch URLs,
-create a public repository, run hosted CI, write files, or perform
+The checker reads only local repository files. It does not fetch URLs,
+create or mutate GitHub state, run hosted CI, write files, or perform
 credentialed checks.
 """
 
@@ -13,8 +13,8 @@ from pathlib import Path
 
 
 SCRIPT = Path(__file__).resolve()
-PROJECT_ROOT = SCRIPT.parents[5]
-STAGING_ROOT = PROJECT_ROOT / "docs" / "portal-staging"
+PROJECT_ROOT = SCRIPT.parents[2]
+STAGING_ROOT = PROJECT_ROOT
 INVENTORY = SCRIPT.with_name("expected-inventory.json")
 
 LOCAL_LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
@@ -169,7 +169,7 @@ def main():
     failures.extend(check_ascii(ascii_paths))
 
     status = "pass" if not failures else "fail"
-    print("# FEATURE-007 S-10 Local Smoketest Report")
+    print("# Open Agent Contracts Local Smoketest Report")
     print()
     print("status: " + status)
     print("project_root: " + str(PROJECT_ROOT))
@@ -188,11 +188,11 @@ def main():
     else:
         print("## Result")
         print()
-        print("Local staged inventory smoke passed.")
+        print("Local repository inventory smoke passed.")
         print()
-        print("This does not authorize public launch, publication,")
-        print("portal-repo transcription, domain setup, hosting, or")
-        print("credentialed checks.")
+        print("This does not authorize public launch, Pages, domain")
+        print("setup, hosting, marketplace submission, package")
+        print("publication, support publication, or credentialed checks.")
     return 0 if not failures else 1
 
 
