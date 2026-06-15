@@ -9,8 +9,8 @@ what happened.
 
 This repository is the quiet public setup home for the v0 specification and
 reference portal content. GitHub Pages is enabled for a small static front
-door. It does not announce a public launch, publish packages, submit
-marketplace listings, or claim certification.
+door at `openagentcontracts.org`. It does not announce a public launch, publish
+packages, submit marketplace listings, or claim certification.
 
 ## Start Here
 
