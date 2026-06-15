@@ -7,10 +7,10 @@ context is available, which actions exist, what each action can change,
 which actions need preview or human authorization, and what receipt proves
 what happened.
 
-This repository is the quiet setup home for the v0 specification and
-reference portal content. It is private during setup. It does not announce a
-public launch, enable GitHub Pages, configure a domain, publish packages,
-submit marketplace listings, or claim certification.
+This repository is the quiet public setup home for the v0 specification and
+reference portal content. It does not announce a public launch, enable GitHub
+Pages, configure a domain, publish packages, submit marketplace listings, or
+claim certification.
 
 ## Start Here
 
