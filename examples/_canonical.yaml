@@ -1,0 +1,37 @@
+contract_version: "0.1.0"
+app:
+  id: example.canonical
+  purpose: >
+    Canonical AOC v0 example used to prove the YAML <-> JSON lossless
+    interchange claim. The paired _canonical.json file holds the same
+    object tree in lossless JSON form. The pair carries no comments
+    inside the structure so the round-trip stays byte-stable under
+    standard parser normalization.
+contexts:
+  - id: ctx.surface
+    label: Surface
+    description: Single demonstration context.
+actions:
+  - id: action.list
+    label: List items
+    effect_class: read_only
+    gate: none
+  - id: action.draft
+    label: Draft an item
+    effect_class: reversible_internal
+    gate: review_required
+human_ask:
+  channel: in_app
+  note: Confirm before drafting.
+receipts:
+  - proposed
+  - approved
+  - refused
+  - executed
+anti_claims:
+  - "A0 — AOC is a legibility commitment, not an enforcement commitment."
+  - "A9 — AOC projects into MCP, OpenAPI, A2A, WebMCP, llms.txt, Anthropic Skills, and OpenAI Apps SDK; it does not replace any of them."
+provenance:
+  author: agent-augmentation project (synthetic example author)
+  generated_at: "2026-06-13T00:00:00Z"
+  generator: hand-authored

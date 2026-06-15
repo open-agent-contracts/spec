@@ -1,0 +1,14 @@
+contract_version: v0.x
+framework: mcp
+framework_version: 2025-11-25
+projection: complete
+covered_fields: [app, contexts, actions, effect_class, gate, human_ask, contract_version]
+gaps:
+  - field: receipts
+    reason: "MCP has no receipt envelope; receipts ship as a separate AOC artifact."
+sharp_edges:
+  - "MCP tool annotations are treated as untrusted unless the server is trusted; AOC effect_class/gate projected as annotations must carry provenance."
+  - "MCP elicitation form mode MUST NOT carry sensitive credentials; AOC contracts must route those asks through human_ask.channel = out_of_band (URL mode)."
+verified_by: maintainer
+verified_on: 2026-06-13
+reverify_due: 2026-09-13

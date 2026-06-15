@@ -1,0 +1,57 @@
+# notes-app — minimal valid v0 AOC.
+#
+# Per CONCEPT-001 plan §6.1 Slice F002-B and CONCEPT-004 plan §4.3, this
+# fixture is the smallest valid contract: read_only-only actions, so
+# human_ask MAY be {} per the §2.1 conditional shallow-required rule.
+# Serves the North-Star success-picture sentence "write a simple Agent
+# Operating Contract by hand".
+
+contract_version: "0.1.0"
+
+app:
+  id: example.notes-app
+  purpose: |
+    A single-user notes application. Lets the user create, edit, search,
+    and read short text notes locally. The agent role is to help locate
+    and summarize notes the user has already written.
+
+contexts:
+  - id: ctx.notes-list
+    label: Notes list
+    description: The collection of every note the user has authored.
+  - id: ctx.note-detail
+    label: Note detail
+    description: A single note open for reading.
+  - id: ctx.search
+    label: Search surface
+    description: Free-text search across the notes catalog.
+
+actions:
+  - id: action.list-notes
+    label: List recent notes
+    effect_class: read_only
+    gate: none
+  - id: action.read-note
+    label: Read a note by id
+    effect_class: read_only
+    gate: none
+  - id: action.search-notes
+    label: Search notes by text
+    effect_class: read_only
+    gate: none
+
+# All actions are read_only, so per CONCEPT-001 plan §2.1 the conditional
+# shallow-required rule permits human_ask: {}.
+human_ask: {}
+
+# All actions are read_only, so per CONCEPT-001 plan §2.1 receipts may be
+# []. The validator emits no receipt-coverage error in this state.
+receipts: []
+
+# anti_claims intentionally omitted: optional-with-default. The validator
+# injects the canonical A0..A14 list into the normalized output.
+
+provenance:
+  author: agent-augmentation project (synthetic example author)
+  generated_at: "2026-06-13T00:00:00Z"
+  generator: hand-authored

@@ -1,0 +1,13 @@
+{
+  "rows": {
+    "fixture-mcp": {
+      "url_hashes": {
+        "https://example.invalid/mcp-spec": "0da61e697df5356c9de467b956786895ce8e11f4a58be0a4ee7305fdc765710c"
+      },
+      "url_payloads": {
+        "https://example.invalid/mcp-spec": "3c68746d6c3e3c626f64793e3c68313e4d4350207370656320736e617073686f742076313c2f68313e3c703e7265766973696f6e3a20323032352d31312d32353c2f703e3c2f626f64793e3c2f68746d6c3e"
+      }
+    }
+  },
+  "schema_version": 1
+}

@@ -1,0 +1,8 @@
+name: Other Vendor Plugin Compatibility Row
+vendor: Other Vendor
+contract_version: v0.x
+gap: partial-support
+notes: |
+  This row is for a non-ClawMagic vendor, but mistakenly mentions
+  ClawMagic in passing. The hygiene CI must refuse this string
+  outside the allowed compat files.

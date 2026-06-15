@@ -1,0 +1,128 @@
+# checkout-helper — comprehensive-coverage v0 AOC.
+#
+# Per CONCEPT-001 plan §6.1 Slice F002-B and CONCEPT-004 plan §4.3:
+# includes `irreversible` actions, `forbidden` actions, full `receipts[]`,
+# explicit `anti_claims` (carrying the canonical A0..A14 list verbatim so
+# this contract round-trips without relying on default injection),
+# explicit `provenance`, and `export_targets: [mcp, openapi]`. The
+# `two_key` experimental field appears on the high-value-refund action
+# per CONCEPT-004 plan §4.3 note. The `forbidden` action demonstrates
+# that AOC and host safety policy carry the refusal — there is no native
+# projection for `forbidden`.
+
+contract_version: "0.1.0"
+
+app:
+  id: example.checkout-helper
+  purpose: |
+    A checkout helper for a synthetic small online storefront. Reads cart
+    state, proposes adjustments, and (with authorization) updates carts,
+    issues refunds, or cancels orders.
+
+contexts:
+  - id: ctx.cart
+    label: Cart
+    description: The current shopping cart for the active customer session.
+  - id: ctx.order
+    label: Order
+    description: A submitted order.
+  - id: ctx.customer-profile
+    label: Customer profile
+    description: The synthetic customer profile attached to a session.
+  - id: ctx.refund-policy
+    label: Refund policy
+    description: The synthetic store's refund-policy text.
+
+actions:
+  - id: action.list-cart
+    label: List cart contents
+    effect_class: read_only
+    gate: none
+  - id: action.suggest-cart-edit
+    label: Suggest a cart edit before applying it
+    effect_class: read_only
+    gate: preview
+  - id: action.update-cart
+    label: Update cart line items in local state
+    effect_class: reversible_internal
+    gate: review_required
+  - id: action.submit-order
+    label: Submit the cart as an order on the connected storefront
+    effect_class: external
+    gate: authorization_required
+  - id: action.cancel-order
+    label: Cancel a submitted order before it has shipped
+    effect_class: external
+    gate: authorization_required
+  - id: action.issue-refund
+    label: Issue a refund for a shipped order
+    effect_class: irreversible
+    gate: authorization_required
+    two_key:
+      requires_second_approver: true
+      threshold_amount_minor_units: 50000
+      note: Refunds above the threshold require a second approver.
+  - id: action.collect-payment-token
+    label: Collect a payment token directly inside the chat surface
+    effect_class: external
+    gate: forbidden
+    rollback: |
+      Not applicable — collection is refused. Direct token collection is
+      forbidden by this contract; tokens MUST be collected through the
+      out-of-band channel.
+
+human_ask:
+  channel: out_of_band
+  note: |
+    Authorization for external or irreversible actions (submit-order,
+    cancel-order, issue-refund) is collected through an out-of-band URL
+    flow. The runtime MUST verify originator identity for that URL flow
+    before any irreversible step (CONCEPT-001 plan §5.4 runtime
+    obligation). Lighter review confirmations may surface in-app at
+    runtime; the contract-level channel commitment is out_of_band so the
+    strictest action in this catalog is covered cleanly.
+
+receipts:
+  - proposed
+  - approved
+  - refused
+  - executed
+  - outcome_recorded
+
+# Explicit anti_claims list (the canonical A0..A14 default, carried
+# verbatim from CONCEPT-001 plan §8.1). Demonstrates the contract author
+# opting in explicitly rather than relying on default injection. Authors
+# may add custom anti-claims of their own beyond this list.
+anti_claims:
+  - "A0 — AOC is a legibility commitment, not an enforcement commitment."
+  - "A1 — AOC does not make an agent act safely. It makes the boundaries an agent operates within legible so a real safety system has something to enforce against."
+  - "A2 — There is no readiness score. There are coverage findings per field."
+  - "A3 — AOC is not a compliance document. It does not satisfy GDPR, HIPAA, SOC2, or similar audit regimes."
+  - "A4 - Vendor plugin delivery is a projection target, not a canonical runtime. AOC has no vendor-specific fields."
+  - "A5 — AOC is not an internal-system doctrine export. Internal role names and creed text do not appear in this contract."
+  - "A6 — No candidate public name appears in package identifiers, marketplace manifests, domains, durable API names, or release artifacts until the public-name gate is locked."
+  - "A7 — Publishing an AOC does not declare an app ready as a binary state. Coverage is judged per-field, per-coverage, per-version."
+  - "A8 — AOC does not grant any runtime permission to forward a user's bearer token across service boundaries."
+  - "A9 — AOC projects into MCP, OpenAPI, A2A, WebMCP, llms.txt, Anthropic Skills, and OpenAI Apps SDK; it does not replace any of them."
+  - "A10 — Vendor surfaces are projection targets, not sources of truth. The compatibility registry reports gaps; it does not endorse the vendor."
+  - "A11 — Numeric readiness score is forbidden in the schema. Coverage is categorical."
+  - "A12 — Receipts are operational artifacts for the agent-app interaction; they are not a substitute for a regulatory audit log."
+  - "A13 — llms.txt is a personal and community proposal; the standard cites its status accurately."
+  - "A14 — AOC does not promise that WebMCP, agents.json, or OpenAI Apps SDK self-serve flows are stable. The cadenced reverification probe is the load-bearing mitigation."
+
+provenance:
+  author: agent-augmentation project (synthetic example author)
+  generated_at: "2026-06-13T00:00:00Z"
+  generator: hand-authored
+
+user_values:
+  - prefer brevity
+  - confirm before any payment or refund step
+
+hard_boundaries:
+  - never collect a payment token directly inside the chat surface
+  - never authorize a refund above the high-value threshold without a second approver
+
+export_targets:
+  - mcp
+  - openapi

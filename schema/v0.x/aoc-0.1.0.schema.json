@@ -1,0 +1,230 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aoc/v0.1.0",
+  "$comment": "PROVISIONAL, NON-DURABLE INTERNAL/DOGFOOD NAMESPACE. The 'aoc/v0.1.0' value above is the internal monorepo-only schema-version slug used for the FEATURE-002 v0 build; it is NOT a published public schema URL. The published public $id value is operator-gated by G-NAME-BRAND + artifact-name + API-name resolution (CONCEPT-004 plan sections 5.1 and 6.1). The future rename from this internal slug to the public URL is orthogonal to contract_version and does not itself bump the contract version. Canonical contract serialization is YAML; lossless JSON is the equivalent mirror form. A single schema validates both forms via the parser's normalized object tree.",
+  "title": "Agent Operating Contract (AOC) v0.1.0",
+  "description": "The v0 Agent Operating Contract grammar. A contract document declares an app's purpose, context catalog, action catalog, human-ask path, receipt contract, anti-claims, and provenance so an agent operating on or alongside the app has a single legible source of truth. Per CONCEPT-001 plan section 2.5 non-goals, this schema is NOT an agent runtime, NOT a compliance certification, and NOT a permission system; it is a legibility commitment. The schema raw-requires exactly seven root keys (contract_version, app, contexts, actions, human_ask, receipts, provenance); anti_claims is optional-with-default in raw input and the default value below carries the canonical A0..A14 anti-claim list per CONCEPT-001 plan section 8.1. Per CONCEPT-001 plan section 2.8, unknown extension fields are accepted as no-op extensions unless the field name appears in the closed deferred-root-key list encoded as the not/anyOf rule on this schema (the readiness, cryptographic-attestation, and public-name-spec keys per FEATURE-002 plan section 2.3).",
+  "type": "object",
+  "required": [
+    "contract_version",
+    "app",
+    "contexts",
+    "actions",
+    "human_ask",
+    "receipts",
+    "provenance"
+  ],
+  "properties": {
+    "contract_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+([-+][0-9A-Za-z.-]+)?$",
+      "description": "Semver string targeting the AOC standard itself (e.g. 0.1.0). Pre-stable in v0.x per CONCEPT-001 plan section 3.1. The validator strict-and-bidirectionally matches this value against its target version per FEATURE-002 plan section 3.5."
+    },
+    "app": {
+      "type": "object",
+      "required": ["id", "purpose"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Opaque, builder-chosen identifier for the app. No central registry, no collision check (CONCEPT-001 plan section 2.7). Synthetic examples in this catalog use the example. prefix."
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Plain-prose statement (1-2 sentences) of what the app is for and who its users are."
+        }
+      },
+      "additionalProperties": true
+    },
+    "contexts": {
+      "type": "array",
+      "description": "Context catalog: pages, entities, states, relationships, or provenance the app exposes to the agent. May be the empty array; emptiness emits the F_EMPTY_CONTEXTS coverage finding but does not block adoption.",
+      "items": {
+        "type": "object",
+        "required": ["id", "label"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "actions": {
+      "type": "array",
+      "description": "Action catalog: machine-readable list of actions with risk class and confirmation gate. May be the empty array; emptiness emits the F_EMPTY_ACTIONS coverage finding but does not block adoption.",
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "effect_class", "gate"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "inputs": {
+            "description": "Sketch shape for v0 (free-form); a JSON Schema for inputs is a v1 graduation target. Tagged experimental in v0.",
+            "type": "object",
+            "additionalProperties": true
+          },
+          "effect_class": {
+            "type": "string",
+            "enum": ["read_only", "reversible_internal", "external", "irreversible"],
+            "description": "Closed enum per CONCEPT-001 plan section 2.2 and CONCEPT-004 plan section 4.1.3."
+          },
+          "gate": {
+            "type": "string",
+            "enum": ["none", "preview", "review_required", "authorization_required", "forbidden"],
+            "description": "Closed enum per CONCEPT-001 plan section 2.2. A non-read_only action declaring gate: none emits the F_NON_READONLY_GATE_NONE coverage finding."
+          },
+          "cooldown": {
+            "description": "Optional extra gate shape. Tagged experimental in v0 (CONCEPT-001 plan section 3.2).",
+            "type": "object",
+            "additionalProperties": true
+          },
+          "two_key": {
+            "description": "Optional extra gate shape. Tagged experimental in v0 (CONCEPT-001 plan section 3.2).",
+            "type": "object",
+            "additionalProperties": true
+          },
+          "binding_status": {
+            "type": "string",
+            "enum": ["advisory", "binding"],
+            "description": "Optional per-action binding tag. Tagged experimental in v0 (CONCEPT-001 plan section 3.2)."
+          },
+          "rollback": {
+            "type": "string",
+            "description": "Optional free-text rollback or compensation note."
+          },
+          "export_targets": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Optional per-action export-target list (the per-action shape is reserved for future use; v0 contracts typically declare export_targets at the root level)."
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "human_ask": {
+      "type": "object",
+      "$comment": "Shallow-required-conditional. JSON Schema accepts both the empty object {} and the {channel, note} shape. The semantic rule engine emits E_HUMAN_ASK_REQUIRED if {} appears with any non-read_only action (FEATURE-002 plan section 3.3 and CONCEPT-001 plan section 2.1), and E_OUT_OF_BAND_REQUIRED if gate: authorization_required appears on an external/irreversible action with channel != out_of_band (CONCEPT-001 plan section 5.4).",
+      "properties": {
+        "channel": {
+          "type": "string",
+          "enum": ["in_app", "email_link", "push", "cli", "out_of_band"]
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "receipts": {
+      "type": "array",
+      "description": "Shallow-required-conditional event-name array the contract guarantees a compliant runtime will emit. The canonical vocabulary is proposed, approved, refused, executed, outcome_recorded (CONCEPT-001 plan section 5.3); contracts MAY add custom receipt event names. Coverage rules R-1..R-4 from CONCEPT-001 plan section 5.3 are enforced by the semantic rule engine.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "anti_claims": {
+      "type": "array",
+      "description": "Optional-with-default. If absent from raw input the validator/serializer injects the canonical A0..A14 default below. Explicit [] keeps the array empty and emits the F_EMPTY_ANTI_CLAIMS coverage finding.",
+      "items": {
+        "type": "string"
+      },
+      "default": [
+        "A0 — AOC is a legibility commitment, not an enforcement commitment.",
+        "A1 — AOC does not make an agent act safely. It makes the boundaries an agent operates within legible so a real safety system has something to enforce against.",
+        "A2 — There is no readiness score. There are coverage findings per field.",
+        "A3 — AOC is not a compliance document. It does not satisfy GDPR, HIPAA, SOC2, or similar audit regimes.",
+        "A4 - Vendor plugin delivery is a projection target, not a canonical runtime. AOC has no vendor-specific fields.",
+        "A5 — AOC is not an internal-system doctrine export. Internal role names and creed text do not appear in this contract.",
+        "A6 — No candidate public name appears in package identifiers, marketplace manifests, domains, durable API names, or release artifacts until the public-name gate is locked.",
+        "A7 — Publishing an AOC does not declare an app ready as a binary state. Coverage is judged per-field, per-coverage, per-version.",
+        "A8 — AOC does not grant any runtime permission to forward a user's bearer token across service boundaries.",
+        "A9 — AOC projects into MCP, OpenAPI, A2A, WebMCP, llms.txt, Anthropic Skills, and OpenAI Apps SDK; it does not replace any of them.",
+        "A10 — Vendor surfaces are projection targets, not sources of truth. The compatibility registry reports gaps; it does not endorse the vendor.",
+        "A11 — Numeric readiness score is forbidden in the schema. Coverage is categorical.",
+        "A12 — Receipts are operational artifacts for the agent-app interaction; they are not a substitute for a regulatory audit log.",
+        "A13 — llms.txt is a personal and community proposal; the standard cites its status accurately.",
+        "A14 — AOC does not promise that WebMCP, agents.json, or OpenAI Apps SDK self-serve flows are stable. The cadenced reverification probe is the load-bearing mitigation."
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["author", "generated_at"],
+      "properties": {
+        "author": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Free-form attribution string (org, person, project, or synthetic-app author label)."
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO-8601 timestamp of contract authoring or generation."
+        },
+        "generator": {
+          "type": "string",
+          "description": "Optional generator label. Absence from raw input emits the F_GENERATOR_MISSING coverage finding unconditionally in v0; hand-authored contracts suppress the finding by setting generator: hand-authored (FEATURE-002 plan section 7.5)."
+        }
+      },
+      "additionalProperties": true
+    },
+    "user_values": {
+      "type": "array",
+      "description": "Optional builder-stated preferences, tone, or norms the agent should respect. Tagged experimental in v0 (CONCEPT-001 plan section 3.2). Synthetic examples MUST keep values neutral (e.g. 'prefer brevity') and MUST NOT paraphrase doctrine.",
+      "items": { "type": "string" }
+    },
+    "hard_boundaries": {
+      "type": "array",
+      "description": "Optional explicit must-not / must-never list. Advisory in v0; tagged experimental.",
+      "items": { "type": "string" }
+    },
+    "export_targets": {
+      "type": "array",
+      "description": "Optional array of strings naming wire formats the builder intends to export to (e.g. mcp, openapi, a2a, llms-txt, webmcp, actionspec, skill-md). Builder-asserted intent only; not a canonical pointer. Tagged experimental in v0.",
+      "items": { "type": "string" }
+    },
+    "stability": {
+      "type": "object",
+      "description": "Optional sidecar stability map (field name -> stable/experimental/deprecated). The spec text defines default stabilities; this sidecar overrides per contract.",
+      "additionalProperties": {
+        "type": "string",
+        "enum": ["stable", "experimental", "deprecated"]
+      }
+    }
+  },
+  "not": {
+    "anyOf": [
+      { "required": ["readiness_score"] },
+      { "required": ["agent_ready"] },
+      { "required": ["agent_readiness"] },
+      { "required": ["readiness_grade"] },
+      { "required": ["signature"] },
+      { "required": ["signatures"] },
+      { "required": ["attestation"] },
+      { "required": ["attestations"] },
+      { "required": ["signed_by"] },
+      { "required": ["signing_key"] },
+      { "required": ["$id"] },
+      { "required": ["schema_id"] },
+      { "required": ["public_schema_id"] },
+      { "required": ["published_id"] }
+    ]
+  },
+  "additionalProperties": true
+}

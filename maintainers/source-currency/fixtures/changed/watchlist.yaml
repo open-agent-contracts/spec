@@ -1,0 +1,37 @@
+# Fixture watchlist used by the probe `check` changed-case test.
+#
+# Two synthetic URLs:
+#
+# - fixture-mcp: content changes AND the `revision:` version signal
+#   moves between snapshots. Expected: a source-currency issue payload
+#   with the `framework-version-bump` label added.
+# - fixture-webmcp: content changes but no version-signal regex shifts
+#   match-count between snapshots. Expected: a source-currency issue
+#   payload with the default label only.
+
+schema_version: 1
+build_date: 2026-06-14
+sources:
+  - id: fixture-mcp
+    surface: fixture mcp source
+    primary_urls:
+      - https://example.invalid/mcp-spec
+    cadence_months: 3
+    verified_on: 2026-06-13
+    next_review_due: 2026-09-13
+    version_signals:
+      - revision
+    mapping_status: v0-mapping
+    notes: "Synthetic fixture; content-hash + version-signal shift."
+
+  - id: fixture-webmcp
+    surface: fixture webmcp source
+    primary_urls:
+      - https://example.invalid/webmcp-draft
+    cadence_months: 1
+    verified_on: 2026-06-13
+    next_review_due: 2026-07-13
+    version_signals:
+      - cg-draft
+    mapping_status: v0-mapping
+    notes: "Synthetic fixture; content-hash change without a version-signal shift."

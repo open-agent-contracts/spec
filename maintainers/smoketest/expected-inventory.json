@@ -1,0 +1,160 @@
+{
+  "groups": [
+    {
+      "name": "ia_sections",
+      "paths": [
+        "s-1/README.md",
+        "s-1/standard/README.md",
+        "s-1/examples/README.md",
+        "s-1/mappings/README.md",
+        "s-1/compat/README.md",
+        "s-1/changelog/README.md",
+        "s-1/guides/README.md",
+        "s-1/about/README.md",
+        "s-1/open/README.md",
+        "s-1/tools/README.md",
+        "s-1/compat/badges/README.md",
+        "s-1/support/commercial/README.md",
+        "s-1/certification/README.md",
+        "s-1/CONTRIBUTING.md",
+        "s-1/LICENSE"
+      ]
+    },
+    {
+      "name": "standard_pages",
+      "paths": [
+        "s-2/standard/README.md",
+        "s-2/standard/concepts/README.md",
+        "s-2/standard/schema/README.md",
+        "s-2/standard/vocabulary/README.md",
+        "s-2/standard/gates/README.md",
+        "s-2/standard/receipts/README.md",
+        "s-2/standard/versioning/README.md",
+        "s-2/standard/conformance/README.md"
+      ]
+    },
+    {
+      "name": "example_contracts",
+      "paths": [
+        "s-3/examples/hello-contract/contract.yaml",
+        "s-3/examples/read-only/contract.yaml",
+        "s-3/examples/reversible/contract.yaml",
+        "s-3/examples/external/contract.yaml",
+        "s-3/examples/irreversible/contract.yaml",
+        "s-3/examples/anti-patterns/contract.yaml"
+      ]
+    },
+    {
+      "name": "mapping_pages",
+      "paths": [
+        "s-4/mappings/mcp/README.md",
+        "s-4/mappings/a2a/README.md",
+        "s-4/mappings/openapi/README.md",
+        "s-4/mappings/llms-txt/README.md",
+        "s-4/mappings/webmcp/README.md",
+        "s-4/mappings/anthropic-skills/README.md",
+        "s-4/mappings/openai-apps-sdk/README.md",
+        "s-4/mappings/clawmagic/README.md"
+      ]
+    },
+    {
+      "name": "compat_rows",
+      "paths": [
+        "s-5/compat/mcp-2025-11-25.yaml",
+        "s-5/compat/openapi-3-2-0.yaml",
+        "s-5/compat/a2a-1-0.yaml",
+        "s-5/compat/llms-txt-proposal.yaml",
+        "s-5/compat/webmcp-cg-draft.yaml",
+        "s-5/compat/openai-apps-sdk.yaml",
+        "s-5/compat/anthropic-agent-skills.yaml",
+        "s-5/compat/clawmagic-plugin.yaml",
+        "s-5/compat/index.html"
+      ]
+    },
+    {
+      "name": "guide_pages",
+      "paths": [
+        "s-7/changelog/v0/2026-06-13-initial.md",
+        "s-7/guides/adding-a-contract-by-hand.md",
+        "s-7/guides/validating-your-contract.md",
+        "s-7/guides/exporting-to-mcp.md",
+        "s-7/guides/exporting-to-openapi.md",
+        "s-7/guides/exporting-to-a2a.md",
+        "s-7/guides/human-review-and-authorization.md"
+      ]
+    },
+    {
+      "name": "boundary_pages",
+      "paths": [
+        "s-8/about/README.md",
+        "s-8/open/README.md",
+        "s-8/CONTRIBUTING.md"
+      ]
+    },
+    {
+      "name": "maintainer_tooling",
+      "paths": [
+        "s-6/components/source-currency-badge.html",
+        "s-6/components/source-currency-badge.fixture.html",
+        "s-6/about/watchlist/watchlist.yaml",
+        "s-6/maintainers/source-currency/source_currency_probe.py",
+        "s-6/maintainers/status.md",
+        "s-9/maintainers/hygiene/hygiene_ci.py",
+        "s-9/maintainers/hygiene/hygiene-ci.yml"
+      ]
+    },
+    {
+      "name": "s10_packet",
+      "paths": [
+        "s-10/README.md",
+        "s-10/HYGIENE-RECEIPT.md",
+        "s-10/maintainers/launch-dry-run.md",
+        "s-10/maintainers/skeptical-reader-walkthrough.md",
+        "s-10/maintainers/smoketest/expected-inventory.json",
+        "s-10/maintainers/smoketest/portal_smoketest.py"
+      ]
+    }
+  ],
+  "monorepo_tools": [
+    "bin/portal-transcribe/portal_transcribe.py",
+    "bin/portal-transcribe/README.md"
+  ],
+  "content_checks": [
+    {
+      "path": "s-5/compat/index.html",
+      "contains": [
+        "<td>mcp</td>",
+        "<td>openapi</td>",
+        "<td>a2a</td>",
+        "<td>llms-txt</td>",
+        "<td>webmcp</td>",
+        "<td>openai-apps-sdk</td>",
+        "<td>anthropic-agent-skills</td>",
+        "<td>clawmagic (vendor plugin)</td>",
+        "class=\"yellow\">yellow"
+      ]
+    },
+    {
+      "path": "s-6/components/source-currency-badge.fixture.html",
+      "contains": [
+        "data-source-currency-status=\"green\"",
+        "data-source-currency-status=\"yellow\"",
+        "data-source-currency-status=\"red\""
+      ]
+    },
+    {
+      "path": "s-6/maintainers/status.md",
+      "contains": [
+        "No past-due pages on the 2026-06-14 build.",
+        "No pages within the 30-day review window on the 2026-06-14 build."
+      ]
+    },
+    {
+      "path": "s-10/maintainers/launch-dry-run.md",
+      "contains": [
+        "G-LAUNCH authorized",
+        "Current sign-off: not signed."
+      ]
+    }
+  ]
+}

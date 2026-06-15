@@ -1,0 +1,176 @@
+# Source-currency watchlist for the Open Agent Contracts public
+# reference portal.
+#
+# Maintainer-edited only in v0. The source-currency probe under
+# maintainers/source-currency/ is read-only against this file; the probe
+# never writes back. A maintainer updates the watchlist by hand: when a
+# probe-emitted source-currency issue lands, the maintainer either
+# updates verified_on (after pulling the source forward) or
+# next_review_due (after deciding to defer review).
+#
+# Row schema:
+#   id:                 stable slug used in issue titles and probe state
+#   surface:            short human-readable name for the source surface
+#   primary_urls:       ordered list of public URLs the probe should fetch
+#   cadence_months:     review cadence in months (1, 3, or 6)
+#   verified_on:        date the surface was last reviewed (YYYY-MM-DD)
+#   next_review_due:    next-review date (verified_on + cadence_months)
+#   version_signals:    optional list of regex-style version-string
+#                       hints; on a hash change that also touches one of
+#                       these signals the probe additionally emits the
+#                       framework-version-bump label
+#   mapping_status:     either "v0-mapping" (has a /mappings/* page) or
+#                       "watchlist-only" (cited/deferred per CONCEPT-002
+#                       plan section 5.3, no v0 /mappings/ page)
+#   notes:              optional one-line note from the maintainer
+
+schema_version: 1
+build_date: 2026-06-14
+sources:
+
+  - id: mcp-spec-latest
+    surface: mcp spec (latest)
+    primary_urls:
+      - https://modelcontextprotocol.io/specification/latest
+    cadence_months: 3
+    verified_on: 2026-06-13
+    next_review_due: 2026-09-13
+    version_signals:
+      - revision
+      - protocol_version
+    mapping_status: v0-mapping
+    notes: "Active spec; URL-mode elicitation new (CONCEPT-005 section 6.4)."
+
+  - id: mcp-authorization
+    surface: mcp authorization spec
+    primary_urls:
+      - https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization
+    cadence_months: 3
+    verified_on: 2026-06-13
+    next_review_due: 2026-09-13
+    version_signals:
+      - revision
+    mapping_status: v0-mapping
+    notes: "Token-passthrough MUST-NOT lives here; load-bearing for AOC anti-claim 8."
+
+  - id: mcp-elicitation
+    surface: mcp elicitation spec
+    primary_urls:
+      - https://modelcontextprotocol.io/specification/2025-11-25/client/elicitation
+    cadence_months: 3
+    verified_on: 2026-06-13
+    next_review_due: 2026-09-13
+    version_signals:
+      - revision
+    mapping_status: v0-mapping
+    notes: "URL-mode elicitation is the human-ask interlock for MCP."
+
+  - id: openapi-spec
+    surface: openapi spec
+    primary_urls:
+      - https://spec.openapis.org/oas/latest.html
+    cadence_months: 6
+    verified_on: 2026-06-13
+    next_review_due: 2026-12-13
+    version_signals:
+      - openapi
+    mapping_status: v0-mapping
+    notes: "Slow-moving; 6-month cadence per CONCEPT-005 section 6.4."
+
+  - id: a2a-home
+    surface: a2a home
+    primary_urls:
+      - https://a2a-protocol.org/latest/
+    cadence_months: 3
+    verified_on: 2026-06-13
+    next_review_due: 2026-09-13
+    version_signals:
+      - version
+      - latest
+    mapping_status: v0-mapping
+    notes: "v1.0 just announced (CONCEPT-005 section 6.4); 3-month cadence."
+
+  - id: a2a-spec
+    surface: a2a spec
+    primary_urls:
+      - https://a2a-protocol.org/latest/specification/
+    cadence_months: 3
+    verified_on: 2026-06-13
+    next_review_due: 2026-09-13
+    version_signals:
+      - version
+      - protocol_version
+    mapping_status: v0-mapping
+    notes: "TASK_STATE_INPUT_REQUIRED / TASK_STATE_AUTH_REQUIRED interlock."
+
+  - id: llms-txt
+    surface: llms.txt proposal
+    primary_urls:
+      - https://llmstxt.org/
+    cadence_months: 3
+    verified_on: 2026-06-13
+    next_review_due: 2026-09-13
+    version_signals: []
+    mapping_status: v0-mapping
+    notes: "Community proposal; cited as such (CONCEPT-002 plan section 6.3 anti-claim 13)."
+
+  - id: openai-apps-sdk
+    surface: openai apps sdk
+    primary_urls:
+      - https://developers.openai.com/apps-sdk
+    cadence_months: 3
+    verified_on: 2026-06-13
+    next_review_due: 2026-09-13
+    version_signals:
+      - version
+    mapping_status: v0-mapping
+    notes: "Indirect AOC projection (via MCP)."
+
+  - id: webmcp-cg-draft
+    surface: webmcp cg draft
+    primary_urls:
+      - https://github.com/webmachinelearning/webmcp
+    cadence_months: 1
+    verified_on: 2026-06-13
+    next_review_due: 2026-07-13
+    version_signals:
+      - draft
+      - cg-draft
+    mapping_status: v0-mapping
+    notes: "1-month cadence while CG Draft is pre-stable (CONCEPT-005 section 6.4)."
+
+  - id: anthropic-agent-skills
+    surface: anthropic agent skills
+    primary_urls:
+      - https://platform.claude.com/docs/en/docs/agents-and-tools/agent-skills/overview
+    cadence_months: 3
+    verified_on: 2026-06-13
+    next_review_due: 2026-09-13
+    version_signals:
+      - version
+    mapping_status: v0-mapping
+    notes: "Starter projection only in v0."
+
+  - id: clawmagic-plugin-docs
+    surface: clawmagic plugin docs
+    primary_urls:
+      - https://clawmagic.ai/docs/plugin-development
+      - https://clawmagic.ai/docs/plugin-packaging
+    cadence_months: 3
+    verified_on: 2026-06-13
+    next_review_due: 2026-09-13
+    version_signals:
+      - version
+    mapping_status: v0-mapping
+    notes: "Vendor surface; source currency depends on vendor."
+
+  - id: agents-json-wildcard
+    surface: agents.json (wildcard)
+    primary_urls:
+      - https://docs.wild-card.ai/agentsjson/introduction
+    cadence_months: 6
+    verified_on: 2026-06-13
+    next_review_due: 2026-12-13
+    version_signals: []
+    mapping_status: watchlist-only
+    notes: "Watchlist-only; the v0 mappings page is parked per FEATURE-007 decision D-19."

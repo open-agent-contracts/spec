@@ -1,0 +1,85 @@
+# Portal-repo hygiene CI workflow (staged).
+#
+# Staging-only artifact, transcribed to /maintainers/hygiene/
+# hygiene-ci.yml at the portal repo root once the public portal
+# repo exists (operator gates G-REPO-HOST + G-PROJECT-NAME +
+# G-HOSTING).
+#
+# Implements the four CONCEPT-002 plan section 7.5 checks plus the
+# FEATURE-007 plan section 4.1 placeholder always-block extension.
+# Carries no real credentials, repository secrets, or hosting
+# identifiers; the placeholder set is what this workflow blocks, not
+# what it embeds.
+
+name: Portal Hygiene CI
+
+on:
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+jobs:
+  hygiene:
+    name: portal-bound hygiene scans + render integrity
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out portal source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Step 1 + Step 2 (CONCEPT-002 plan section 7.5).
+      # Source-tree scan. The fixture exclusion is encoded inside
+      # hygiene_ci.py as FIXTURE_EXCLUDE_PREFIX and is load-bearing
+      # (see maintainers/hygiene/README.md). The production scan
+      # honors it by default.
+      - name: Source-tree hygiene scan (steps 1 and 2)
+        run: |
+          python3 maintainers/hygiene/hygiene_ci.py scan .
+
+      # Build the portal site twice from the same source tree in
+      # separate clean workspaces for step 4. The exact build
+      # command is portal-repo-specific and a placeholder here;
+      # maintainers replace it with the real static-site build.
+      - name: Build portal output (first render)
+        run: |
+          mkdir -p build/first
+          # Replace with the real static-site builder command.
+          # Example placeholder: cp -R public/ build/first/
+          true
+
+      - name: Build portal output (second render)
+        run: |
+          mkdir -p build/second
+          # Replace with the real static-site builder command.
+          true
+
+      # Step 3 (CONCEPT-002 plan section 7.5).
+      # Apply the same row policies to the rendered output. The
+      # same fixture exclusion applies; the rendered tree should
+      # not contain a maintainers/hygiene/fixtures/ path either.
+      - name: Post-render hygiene scan (step 3)
+        run: |
+          python3 maintainers/hygiene/hygiene_ci.py scan build/first
+
+      # Step 4 (CONCEPT-002 plan section 7.5).
+      # Compare two rendered output trees byte-for-byte. Build
+      # timestamps, build hashes, or any non-deterministic
+      # templating fails this step.
+      - name: Deterministic render integrity check (step 4)
+        run: |
+          python3 maintainers/hygiene/hygiene_ci.py \
+            render-compare build/first build/second
+
+      # Focused fixture regression suite. The tests point the
+      # scanner at each clean, dirty, allowed, and disallowed fixture
+      # subtree directly, and separately prove that disabling the
+      # production fixture exclusion makes the staged tree fail.
+      - name: Fixture regression suite
+        run: |
+          python3 -m unittest discover -s maintainers/hygiene/tests -v

@@ -1,0 +1,17 @@
+contract_version: v0.x
+framework: webmcp
+framework_version: cg-draft-2025-08-13+
+projection: starter (actions only)
+covered_fields: [actions]
+gaps:
+  - field: effect_class
+    reason: "No native classification."
+  - field: gate
+    reason: "Human confirmation is an Open Question in the WebMCP CG Draft (issues #165, #50)."
+  - field: receipts
+    reason: "No receipt surface in browser API."
+sharp_edges:
+  - "Pre-stable W3C Community Group Draft; breaking changes expected. Re-verify monthly until CG Draft stabilises."
+verified_by: maintainer
+verified_on: 2026-06-13
+reverify_due: 2026-07-13

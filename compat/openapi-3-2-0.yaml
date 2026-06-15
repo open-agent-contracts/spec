@@ -1,0 +1,15 @@
+contract_version: v0.x
+framework: openapi
+framework_version: 3.2.0
+projection: starter
+covered_fields: [app, actions, gate (via x-aoc-gate + Security Requirement), effect_class (via x-aoc-effect-class), receipts (via webhooks)]
+gaps:
+  - field: contexts
+    reason: "OpenAPI has no first-class context concept; mapped via x-aoc-context extension or tags."
+  - field: human_ask
+    reason: "No native equivalent; modelled as vendor extension."
+sharp_edges:
+  - "Webhooks in OAS 3.2 require careful auth scheme alignment with the parent operation."
+verified_by: maintainer
+verified_on: 2026-06-13
+reverify_due: 2026-12-13

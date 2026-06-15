@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Compatibility registry</title>
+<style>
+body { font-family: sans-serif; margin: 2em; max-width: 64em; }
+table { border-collapse: collapse; width: 100%; }
+th, td { border: 1px solid #999; padding: 0.4em 0.6em; text-align: left; vertical-align: top; }
+th { background: #eee; }
+.green { color: #0a6b1f; }
+.yellow { color: #8a6500; }
+.red { color: #a3000a; }
+caption { caption-side: top; text-align: left; padding: 0.4em 0; font-weight: bold; }
+</style>
+</head>
+<body>
+<h1>Compatibility registry</h1>
+<p>One row per compatibility YAML file. Freshness status is computed from
+<code>verified_on</code> and <code>reverify_due</code> against the build date
+2026-06-14: green if the due date is more than 30 days away, yellow if within
+30 days, red if past due.</p>
+<table>
+<caption>Initial v0 entries</caption>
+<thead>
+<tr>
+<th>framework</th>
+<th>framework_version</th>
+<th>projection</th>
+<th>verified_on</th>
+<th>reverify_due</th>
+<th>freshness_status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mcp</td>
+<td>2025-11-25</td>
+<td>complete</td>
+<td>2026-06-13</td>
+<td>2026-09-13</td>
+<td class="green">green</td>
+</tr>
+<tr>
+<td>openapi</td>
+<td>3.2.0</td>
+<td>starter</td>
+<td>2026-06-13</td>
+<td>2026-12-13</td>
+<td class="green">green</td>
+</tr>
+<tr>
+<td>a2a</td>
+<td>1.0</td>
+<td>complete (semantic)</td>
+<td>2026-06-13</td>
+<td>2026-09-13</td>
+<td class="green">green</td>
+</tr>
+<tr>
+<td>llms-txt</td>
+<td>2024-09-03-proposal</td>
+<td>starter</td>
+<td>2026-06-13</td>
+<td>2026-09-13</td>
+<td class="green">green</td>
+</tr>
+<tr>
+<td>webmcp</td>
+<td>cg-draft-2025-08-13+</td>
+<td>starter (actions only)</td>
+<td>2026-06-13</td>
+<td>2026-07-13</td>
+<td class="yellow">yellow</td>
+</tr>
+<tr>
+<td>openai-apps-sdk</td>
+<td>2026-06-13-snapshot</td>
+<td>indirect (via MCP)</td>
+<td>2026-06-13</td>
+<td>2026-09-13</td>
+<td class="green">green</td>
+</tr>
+<tr>
+<td>anthropic-agent-skills</td>
+<td>2026-06-13-snapshot</td>
+<td>starter</td>
+<td>2026-06-13</td>
+<td>2026-09-13</td>
+<td class="green">green</td>
+</tr>
+<tr>
+<td>clawmagic (vendor plugin)</td>
+<td>2026-06-13-snapshot</td>
+<td>complete</td>
+<td>2026-06-13</td>
+<td>2026-09-13</td>
+<td class="green">green</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

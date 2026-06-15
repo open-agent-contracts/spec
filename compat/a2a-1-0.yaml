@@ -1,0 +1,15 @@
+contract_version: v0.x
+framework: a2a
+framework_version: 1.0
+projection: complete (semantic)
+covered_fields: [app, contexts (via Agent Card skills), actions (via skills), gate (via TASK_STATE_INPUT_REQUIRED / TASK_STATE_AUTH_REQUIRED), human_ask]
+gaps:
+  - field: effect_class
+    reason: "A2A does not classify skill effect; carried as advisory metadata."
+  - field: receipts
+    reason: "Can be modelled as Artifacts + task-state transitions but no normative envelope."
+sharp_edges:
+  - "A2A skill granularity may be coarser than AOC action granularity; one A2A skill commonly maps to many AOC actions."
+verified_by: maintainer
+verified_on: 2026-06-13
+reverify_due: 2026-09-13

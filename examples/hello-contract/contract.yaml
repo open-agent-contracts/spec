@@ -1,0 +1,27 @@
+contract_version: 0.1.0
+
+app:
+  id: example.notes-app
+  purpose: >
+    A small notes application that lets one user read notes they have already
+    written.
+
+contexts:
+  - id: ctx.note-list
+    label: Note list
+    description: The list of saved notes available to the user.
+
+actions:
+  - id: action.list-notes
+    label: List saved notes
+    effect_class: read_only
+    gate: none
+
+human_ask: {}
+
+receipts: []
+
+provenance:
+  author: synthetic example catalog
+  generated_at: "2026-06-14T00:00:00Z"
+  generator: hand-authored

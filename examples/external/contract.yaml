@@ -1,0 +1,48 @@
+contract_version: 0.1.0
+
+app:
+  id: example.calendar-assistant
+  purpose: >
+    A calendar assistant for individual users. It can read event context,
+    draft event proposals, and create an event on a connected calendar surface
+    after authorization.
+
+contexts:
+  - id: ctx.calendar
+    label: Calendar
+    description: The events visible on the user's primary calendar.
+  - id: ctx.contacts
+    label: Contacts
+    description: The contacts the user may invite to an event.
+
+actions:
+  - id: action.list-events
+    label: List upcoming events
+    effect_class: read_only
+    gate: none
+  - id: action.preview-event-draft
+    label: Preview a proposed event before creating it
+    effect_class: read_only
+    gate: preview
+  - id: action.create-event
+    label: Create an event on the connected calendar surface
+    effect_class: external
+    gate: authorization_required
+
+human_ask:
+  channel: out_of_band
+  note: >
+    Authorization is collected through the app's own authorization flow. The
+    agent must not ask the user to paste credentials into chat.
+
+receipts:
+  - proposed
+  - approved
+  - refused
+  - executed
+  - outcome_recorded
+
+provenance:
+  author: synthetic example catalog
+  generated_at: "2026-06-14T00:00:00Z"
+  generator: hand-authored

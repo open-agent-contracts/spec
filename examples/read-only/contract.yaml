@@ -1,0 +1,41 @@
+contract_version: 0.1.0
+
+app:
+  id: example.notes-app
+  purpose: >
+    A single-user notes application. The app lets the user create, edit,
+    search, and read short text notes locally.
+
+contexts:
+  - id: ctx.notes-list
+    label: Notes list
+    description: The collection of every note the user has authored.
+  - id: ctx.note-detail
+    label: Note detail
+    description: A single note open for reading.
+  - id: ctx.search
+    label: Search surface
+    description: Free-text search across the notes catalog.
+
+actions:
+  - id: action.list-notes
+    label: List recent notes
+    effect_class: read_only
+    gate: none
+  - id: action.read-note
+    label: Read a note by id
+    effect_class: read_only
+    gate: none
+  - id: action.search-notes
+    label: Search notes by text
+    effect_class: read_only
+    gate: none
+
+human_ask: {}
+
+receipts: []
+
+provenance:
+  author: synthetic example catalog
+  generated_at: "2026-06-14T00:00:00Z"
+  generator: hand-authored

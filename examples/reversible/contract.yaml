@@ -1,0 +1,47 @@
+contract_version: 0.1.0
+
+app:
+  id: example.calendar-assistant
+  purpose: >
+    A calendar assistant for individual users. It reads calendar context and
+    drafts event changes for review before they are applied inside the app.
+
+contexts:
+  - id: ctx.calendar
+    label: Calendar
+    description: The events visible on the user's primary calendar.
+  - id: ctx.working-hours
+    label: Working hours
+    description: The user's declared working-hour preferences.
+
+actions:
+  - id: action.list-events
+    label: List upcoming events
+    effect_class: read_only
+    gate: none
+  - id: action.draft-event
+    label: Draft a new event proposal in local state
+    effect_class: reversible_internal
+    gate: review_required
+  - id: action.revise-event-draft
+    label: Revise an event draft before it is shared
+    effect_class: reversible_internal
+    gate: review_required
+
+human_ask:
+  channel: in_app
+  note: >
+    The app shows the proposed change in its review panel before applying the
+    reversible internal update.
+
+receipts:
+  - proposed
+  - approved
+  - refused
+  - executed
+  - outcome_recorded
+
+provenance:
+  author: synthetic example catalog
+  generated_at: "2026-06-14T00:00:00Z"
+  generator: hand-authored

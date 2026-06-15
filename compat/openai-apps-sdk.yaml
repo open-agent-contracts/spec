@@ -1,0 +1,13 @@
+contract_version: v0.x
+framework: openai-apps-sdk
+framework_version: 2026-06-13-snapshot
+projection: indirect (via MCP)
+covered_fields: [inherits MCP projection]
+gaps:
+  - field: receipts
+    reason: "ChatGPT widget runtime does not specify a receipt envelope."
+sharp_edges:
+  - "Self-serve publishing was 'coming soon' at retrieval; submission flow may change."
+verified_by: maintainer
+verified_on: 2026-06-13
+reverify_due: 2026-09-13

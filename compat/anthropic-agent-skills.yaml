@@ -1,0 +1,19 @@
+contract_version: v0.x
+framework: anthropic-agent-skills
+framework_version: 2026-06-13-snapshot
+projection: starter
+covered_fields: [app.purpose (description), contexts (bundled files), actions (scripts)]
+gaps:
+  - field: effect_class
+    reason: "No native enum; lives in SKILL.md prose."
+  - field: gate
+    reason: "No native enum; trust-and-audit model only."
+  - field: human_ask
+    reason: "Not modelled."
+  - field: receipts
+    reason: "Not modelled."
+sharp_edges:
+  - "Vendor surface; portability across Claude products is not guaranteed (Skills do not sync across surfaces)."
+verified_by: maintainer
+verified_on: 2026-06-13
+reverify_due: 2026-09-13

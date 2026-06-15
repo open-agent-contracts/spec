@@ -1,0 +1,8 @@
+name: ClawMagic Plugin Compatibility Row
+vendor: ClawMagic
+contract_version: v0.x
+gap: full-support
+notes: |
+  This compatibility row documents the ClawMagic plugin. Vendor
+  name allowed in /compat/clawmagic-plugin.yaml per CONCEPT-002
+  plan section 7.4 path-conditional row.

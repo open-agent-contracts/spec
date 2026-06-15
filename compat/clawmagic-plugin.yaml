@@ -1,0 +1,14 @@
+contract_version: v0.x
+framework: clawmagic
+framework_version: 2026-06-13-snapshot
+projection: complete
+covered_fields: [app, contexts (via routing.family / lookbook), actions (actionspec.json), effect_class (implicit in risk_level), gate (confirmation), human_ask]
+gaps:
+  - field: receipts
+    reason: "Not modelled by the public manifest."
+sharp_edges:
+  - "Vendor surface; source-currency for plugin-development docs depends on vendor."
+  - "Plugin type enum {WORKFLOW, UTILITY, TASK, CONNECTOR, MEMORY_PACK} is vendor-private and should not appear in AOC."
+verified_by: maintainer
+verified_on: 2026-06-13
+reverify_due: 2026-09-13

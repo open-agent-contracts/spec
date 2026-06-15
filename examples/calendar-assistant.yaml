@@ -1,0 +1,92 @@
+# calendar-assistant — medium-coverage v0 AOC.
+#
+# Per CONCEPT-001 plan §6.1 Slice F002-B and CONCEPT-004 plan §4.3:
+# mix of reversible_internal and external actions; exercises every gate
+# value except `forbidden`; uses `out_of_band` for an authorization step;
+# declares `export_targets: [actionspec, llms-txt]` so the example matches
+# the §5.2 / Slice F002-D projection smoke-test targets. The `cooldown`
+# experimental field appears on the reschedule action per CONCEPT-004
+# plan §4.3 note.
+
+contract_version: "0.1.0"
+
+app:
+  id: example.calendar-assistant
+  purpose: |
+    A calendar assistant for individual users. Reads existing calendar
+    events, proposes new events, and (with authorization) creates or
+    updates events on a connected calendar surface.
+
+contexts:
+  - id: ctx.calendar
+    label: Calendar
+    description: The set of events the user has visible on their primary calendar.
+  - id: ctx.contacts
+    label: Contacts
+    description: The set of contacts the user can invite to an event.
+  - id: ctx.working-hours
+    label: Working hours
+    description: The user's declared working-hour preferences.
+
+actions:
+  - id: action.list-events
+    label: List upcoming events
+    effect_class: read_only
+    gate: none
+  - id: action.preview-event-draft
+    label: Preview a proposed event before creating it
+    effect_class: read_only
+    gate: preview
+  - id: action.draft-event
+    label: Draft a new event proposal in local state
+    effect_class: reversible_internal
+    gate: review_required
+  - id: action.reschedule-event
+    label: Reschedule an existing event in local state
+    effect_class: reversible_internal
+    gate: review_required
+    cooldown:
+      window_minutes: 15
+      note: Avoid rescheduling the same event repeatedly within a short window.
+  - id: action.create-event
+    label: Create an event on the connected calendar surface
+    effect_class: external
+    gate: authorization_required
+
+human_ask:
+  channel: out_of_band
+  note: |
+    Calendar authorization is collected through an out-of-band URL flow.
+    The agent must not request credentials directly inside the chat
+    surface.
+
+receipts:
+  - proposed
+  - approved
+  - refused
+  - executed
+
+# anti_claims intentionally omitted to demonstrate default injection.
+
+provenance:
+  author: agent-augmentation project (synthetic example author)
+  generated_at: "2026-06-13T00:00:00Z"
+  generator: hand-authored
+
+# Builder-declared user-value preferences (neutral synthetic strings only;
+# no doctrine paraphrase per CONCEPT-001 plan §10 H-3 and FEATURE-002
+# plan §4.2).
+user_values:
+  - prefer brevity
+  - ask before scheduling outside working hours
+
+# Optional builder-stated boundary; advisory in v0.
+hard_boundaries:
+  - never delete an event without explicit user approval
+  - never share calendar contents with third-party services
+
+# Export targets the builder intends to project to. Builder-asserted
+# intent only; not a canonical pointer (CONCEPT-001 plan §8.1 A4 + A9).
+export_targets:
+  - actionspec
+  - llms-txt

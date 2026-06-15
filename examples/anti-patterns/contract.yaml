@@ -1,0 +1,47 @@
+contract_version: 0.1.0
+
+app:
+  id: example.checkout-helper
+  purpose: >
+    A checkout helper for a synthetic small storefront. This contract makes a
+    refused chat-collection action visible without allowing it to run.
+
+contexts:
+  - id: ctx.cart
+    label: Cart
+    description: The current shopping cart for the active customer session.
+  - id: ctx.payment-policy
+    label: Payment policy
+    description: The store policy describing where payment credentials may be collected.
+
+actions:
+  - id: action.list-cart
+    label: List cart contents
+    effect_class: read_only
+    gate: none
+  - id: action.collect-payment-credential
+    label: Collect a payment credential directly inside chat
+    effect_class: external
+    gate: forbidden
+    rollback: >
+      Not applicable. The action is refused by this contract and must not be
+      presented as an executable path.
+
+human_ask:
+  channel: in_app
+  note: >
+    The app explains the refusal in its review panel and directs the user to
+    the normal payment surface instead.
+
+receipts:
+  - proposed
+  - refused
+
+anti_claims:
+  - This contract does not make forbidden actions safe.
+  - This contract does not authorize collection of payment credentials in chat.
+
+provenance:
+  author: synthetic example catalog
+  generated_at: "2026-06-14T00:00:00Z"
+  generator: hand-authored

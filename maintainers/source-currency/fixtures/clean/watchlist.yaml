@@ -1,0 +1,20 @@
+# Fixture watchlist used by the probe `check` clean-case test.
+#
+# Synthetic URL only (RFC 6761 `.invalid` TLD). The probe never reaches
+# the network when --fixture-dir is supplied; the URL is mapped to the
+# pre-staged snapshot under `current/` by SHA-256 hex digest.
+
+schema_version: 1
+build_date: 2026-06-14
+sources:
+  - id: fixture-mcp
+    surface: fixture mcp source
+    primary_urls:
+      - https://example.invalid/mcp-spec
+    cadence_months: 3
+    verified_on: 2026-06-13
+    next_review_due: 2026-09-13
+    version_signals:
+      - revision
+    mapping_status: v0-mapping
+    notes: "Synthetic fixture; never fetched live."

@@ -1,0 +1,19 @@
+contract_version: v0.x
+framework: llms-txt
+framework_version: 2024-09-03-proposal
+projection: starter
+covered_fields: [app.purpose, contexts (as links), actions (as links)]
+gaps:
+  - field: effect_class
+    reason: "Out of scope for llms.txt (content discovery only)."
+  - field: gate
+    reason: "Out of scope."
+  - field: human_ask
+    reason: "Out of scope."
+  - field: receipts
+    reason: "Out of scope."
+sharp_edges:
+  - "llms.txt is a community proposal, not an adopted standard; status disclosure required on mapping page."
+verified_by: maintainer
+verified_on: 2026-06-13
+reverify_due: 2026-09-13

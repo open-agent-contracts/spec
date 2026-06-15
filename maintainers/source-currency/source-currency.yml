@@ -1,0 +1,93 @@
+# Staged GitHub Actions workflow for the source-currency probe.
+#
+# This file is INERT local staging content. It cannot run in this monorepo:
+# - it lives under portal source tree,
+#   not under .github/workflows/ at the repo root;
+# - it embeds no credentials, tokens, secret variables, or real
+#   repository identifier;
+# - it references the portal repo only via open-agent-contracts/spec
+#   (FEATURE-007 plan section 4.1 P-8) and the project only via
+#   Open Agent Contracts (FEATURE-007 plan section 4.1 P-1).
+#
+# The workflow is transcribed into the portal repo only after
+# G-REPO-HOST + G-PROJECT-NAME + G-HOSTING clear (CONCEPT-002 plan
+# section 9.2; CONCEPT-004 plan section 5.11). At transcription time
+# the maintainer wires the issue-emission step with the portal repo's
+# own credential surface; this staged file deliberately stops before
+# that point so no credential variable, secret reference, or auth token
+# value lives in monorepo staging.
+#
+# Issue-surface write semantics only per CONCEPT-002 plan section 5.2:
+# when the maintainer wires the emit-issues step in the portal repo,
+# the probe opens portal-repo issues; it never writes to page
+# frontmatter, the watchlist YAML, or any portal data file.
+
+name: source-currency-probe
+
+on:
+  schedule:
+    # Daily at 06:00 UTC. Maintainer adjusts after the portal repo is created.
+    - cron: "0 6 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  # Issue surface only. No contents:write. No pull-requests:write.
+  # The probe never edits page frontmatter, the watchlist YAML, or any
+  # portal data file in v0 (CONCEPT-002 plan section 5.2).
+  contents: read
+  issues: write
+
+jobs:
+  probe:
+    name: probe primary sources
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout Open Agent Contracts portal source
+        uses: actions/checkout@v4
+
+      - name: set up python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: install probe dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "pyyaml>=6.0,<7"
+
+      - name: run source-currency probe
+        run: |
+          python maintainers/source-currency/source_currency_probe.py check \
+            --watchlist about/watchlist/watchlist.yaml \
+            --state maintainers/source-currency/state/probe-state.json \
+            --output-json /tmp/source-currency-issues.json
+
+      # Issue-emission step intentionally not wired in the staged file.
+      # After G-REPO-HOST + G-PROJECT-NAME + G-HOSTING clear, the
+      # maintainer wires this step inside the portal repo, using that
+      # repo's own credential surface. Until then the probe writes the
+      # JSON payload only; no portal-repo issues are opened from this
+      # staging file.
+      #
+      # The check command exits 1 when source changes are detected.
+      # The future portal-repo workflow must therefore preserve the
+      # issue-emission step after that nonzero check result instead of
+      # treating source drift as a failed job before issues can be
+      # opened.
+      #
+      # The emit-issues subcommand at that point would be:
+      #
+      #   python maintainers/source-currency/source_currency_probe.py \
+      #     emit-issues --input-json /tmp/source-currency-issues.json \
+      #     --repo open-agent-contracts/spec
+      #
+      # using the portal repo's built-in workflow credential, scoped to
+      # issues: write only.
+
+      - name: upload probe payload as workflow artifact (inert preview)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-currency-issues
+          path: /tmp/source-currency-issues.json
+          if-no-files-found: ignore

@@ -1,0 +1,48 @@
+contract_version: 0.1.0
+
+app:
+  id: example.checkout-helper
+  purpose: >
+    A checkout helper for a synthetic small storefront. It reads cart and
+    order state, proposes adjustments, and may request authorization for
+    high-consequence order actions.
+
+contexts:
+  - id: ctx.order
+    label: Order
+    description: A submitted order.
+  - id: ctx.refund-policy
+    label: Refund policy
+    description: The synthetic store's refund-policy text.
+
+actions:
+  - id: action.read-order
+    label: Read order details
+    effect_class: read_only
+    gate: none
+  - id: action.issue-refund
+    label: Issue a refund for a shipped order
+    effect_class: irreversible
+    gate: authorization_required
+
+human_ask:
+  channel: out_of_band
+  note: >
+    Authorization for the refund is collected outside the agent chat surface.
+    The app records the user's approval before executing the refund.
+
+receipts:
+  - proposed
+  - approved
+  - refused
+  - executed
+  - outcome_recorded
+
+anti_claims:
+  - This contract makes the action boundary legible; it does not grant runtime permission.
+  - This contract does not replace the app's own refund controls or audit logs.
+
+provenance:
+  author: synthetic example catalog
+  generated_at: "2026-06-14T00:00:00Z"
+  generator: hand-authored

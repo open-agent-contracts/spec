@@ -1,0 +1,48 @@
+<!--
+  source-currency-badge.html
+
+  Inert HTML snippet for rendering the page-header source-currency badge.
+  No JavaScript. No external CSS. No external assets. No remote fonts.
+  No analytics. No live source-currency check at render time.
+
+  The badge surfaces the page-frontmatter freshness_status field that the
+  portal build computes per CONCEPT-002 plan section 5.1:
+
+    green  when today < next_review_due - 30 days
+    yellow when today is within 30 days before next_review_due
+    red    when today >= next_review_due
+
+  The portal build is expected to substitute the data-* attributes and the
+  visible status word for each rendered page. The badge requires no other
+  runtime behaviour; the flip is purely time-based and front-matter-driven.
+
+  Render contract:
+    - Substitute STATUS_TOKEN with one of: green | yellow | red.
+    - Substitute STATUS_LABEL with one of: Current | Review soon | Past due.
+    - Substitute VERIFIED_ON with the page frontmatter verified_on date.
+    - Substitute NEXT_REVIEW_DUE with the page frontmatter next_review_due date.
+
+  Each colour uses an inline CSS background and text colour drawn from the
+  S-5 compat/index.html palette so the same accessible contrast applies
+  across portal surfaces. The three colour values are kept in this comment
+  so any future build template change has a single source of truth:
+
+    green:  background #d8f0dd  border #5fa56e  text #0a6b1f
+    yellow: background #fbf0c4  border #b89d4d  text #8a6500
+    red:    background #f6d4d6  border #b85458  text #a3000a
+-->
+<span class="source-currency-badge source-currency-badge--STATUS_TOKEN"
+      data-source-currency-status="STATUS_TOKEN"
+      data-verified-on="VERIFIED_ON"
+      data-next-review-due="NEXT_REVIEW_DUE"
+      role="status"
+      aria-label="Source currency: STATUS_LABEL. Last verified VERIFIED_ON. Next review due NEXT_REVIEW_DUE."
+      style="display: inline-block;
+             padding: 0.15em 0.55em;
+             border-radius: 0.25em;
+             font-size: 0.85em;
+             font-weight: 600;
+             line-height: 1.2;
+             border: 1px solid currentColor;">
+  STATUS_LABEL
+</span>

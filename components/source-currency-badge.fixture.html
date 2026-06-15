@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Source-currency badge fixture (today = 2026-06-14)</title>
+<style>
+body { font-family: sans-serif; margin: 2em; max-width: 64em; }
+h1 { font-size: 1.4em; }
+h2 { font-size: 1.1em; margin-top: 1.4em; }
+table { border-collapse: collapse; margin: 0.6em 0 1em; }
+th, td { border: 1px solid #999; padding: 0.4em 0.6em; text-align: left; vertical-align: top; }
+th { background: #eee; }
+.source-currency-badge { display: inline-block; padding: 0.15em 0.55em; border-radius: 0.25em; font-size: 0.85em; font-weight: 600; line-height: 1.2; border: 1px solid currentColor; }
+.source-currency-badge--green { background: #d8f0dd; color: #0a6b1f; border-color: #5fa56e; }
+.source-currency-badge--yellow { background: #fbf0c4; color: #8a6500; border-color: #b89d4d; }
+.source-currency-badge--red { background: #f6d4d6; color: #a3000a; border-color: #b85458; }
+</style>
+</head>
+<body>
+<h1>Source-currency badge fixture</h1>
+<p>This fixture renders the three badge states against a fixed build
+date of 2026-06-14. The rule (CONCEPT-002 plan section 5.1) is:</p>
+<ul>
+<li>green when <code>today &lt; next_review_due - 30 days</code>,</li>
+<li>yellow when <code>today</code> is inside the 30-day window before
+<code>next_review_due</code>,</li>
+<li>red when <code>today &gt;= next_review_due</code>.</li>
+</ul>
+
+<h2>Green: next_review_due = 2026-09-13</h2>
+<table>
+<tr><th>verified_on</th><th>next_review_due</th><th>days until due</th><th>badge</th></tr>
+<tr>
+  <td>2026-06-13</td>
+  <td>2026-09-13</td>
+  <td>91</td>
+  <td>
+    <span class="source-currency-badge source-currency-badge--green"
+          data-source-currency-status="green"
+          data-verified-on="2026-06-13"
+          data-next-review-due="2026-09-13"
+          role="status"
+          aria-label="Source currency: Current. Last verified 2026-06-13. Next review due 2026-09-13.">
+      Current
+    </span>
+  </td>
+</tr>
+</table>
+
+<h2>Yellow: next_review_due = 2026-07-13</h2>
+<table>
+<tr><th>verified_on</th><th>next_review_due</th><th>days until due</th><th>badge</th></tr>
+<tr>
+  <td>2026-06-13</td>
+  <td>2026-07-13</td>
+  <td>29</td>
+  <td>
+    <span class="source-currency-badge source-currency-badge--yellow"
+          data-source-currency-status="yellow"
+          data-verified-on="2026-06-13"
+          data-next-review-due="2026-07-13"
+          role="status"
+          aria-label="Source currency: Review soon. Last verified 2026-06-13. Next review due 2026-07-13.">
+      Review soon
+    </span>
+  </td>
+</tr>
+</table>
+
+<h2>Red: next_review_due = 2026-06-01</h2>
+<table>
+<tr><th>verified_on</th><th>next_review_due</th><th>days until due</th><th>badge</th></tr>
+<tr>
+  <td>2026-03-01</td>
+  <td>2026-06-01</td>
+  <td>-13</td>
+  <td>
+    <span class="source-currency-badge source-currency-badge--red"
+          data-source-currency-status="red"
+          data-verified-on="2026-03-01"
+          data-next-review-due="2026-06-01"
+          role="status"
+          aria-label="Source currency: Past due. Last verified 2026-03-01. Next review due 2026-06-01.">
+      Past due
+    </span>
+  </td>
+</tr>
+</table>
+
+<p>The badge component itself is inert. The portal build renders the
+status word, the colour modifier class, and the <code>data-*</code>
+attributes from page frontmatter; the rendered page never calls a
+network endpoint or runs JavaScript to flip the badge.</p>
+</body>
+</html>
