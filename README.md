@@ -14,6 +14,8 @@ packages, submit marketplace listings, or claim certification.
 
 ## Start Here
 
+- [Start here - what is an AOC and how do I use one?](start-here/)
+
 - [The Standard](standard/)
 - [Examples](examples/)
 - [Framework Mappings](mappings/)
